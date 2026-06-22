@@ -29,4 +29,25 @@ const registerUser = asyncHandler(async (req,res)=>{
     }
     return res.status(201).send("User is Created");
 })
-export {registerUser};
+
+
+const loginUser = asyncHandler(async(req,res)=>{
+    console.log(req.body)
+    const {email,password} = req.body;
+    if(!email || !password){
+        ApiError(401,"Both fields are required !!");
+    }
+    const user = await User.findOne({email});
+    if(!user.isPasswordCorrect(password)){
+        ApiError(402,"Wrong details!!");
+    }
+    const refreshToken = await user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    console.log(refreshToken,accessToken);
+    await res.cookie("accessToken",accessToken);
+    await res.cookie("refreshToken",refreshToken);
+    return res.status(201).send("Logged in");
+})
+
+
+export {registerUser,loginUser};

@@ -18,7 +18,7 @@ const isLoggedIn = async function(req,res,next){
         if(refreshToken){
             const {_id} = await jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET);
             const user = await User.findById(_id);
-            if(!user){throw new ApiError(401,"Cannot be Authorized !!!")};
+            if(user.refreshToken !== refreshToken){throw new ApiError(401,"Cannot be Authorized !!!")};
             req.user = user;
             accessToken = user.generateAccessToken();
             res.cookie("accessToken",accessToken);
