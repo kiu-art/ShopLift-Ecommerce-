@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-
 const UserSchema = new mongoose.Schema({
     userName:{
         type: String,
@@ -50,7 +49,18 @@ const UserSchema = new mongoose.Schema({
     ],
     refreshToken:{
         type: String,
-    }
+    },
+    cart:[{
+        product:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"Product"
+        },
+        quantity:{
+            type:Number,
+            default:1,
+            min:1
+        }
+    }]
 },{timestamps:true})
 
 

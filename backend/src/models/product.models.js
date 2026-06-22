@@ -11,6 +11,11 @@ const ProductSchema = new mongoose.Schema({
         required:[true,"Description is Required!!"],
         trim:true
     },
+    image:{
+        type:String,
+        required:[true,"image is required"],
+        trim:true
+    },
     provider:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Provider",

@@ -1,7 +1,7 @@
-import { User } from "../models/user.models";
+import { User } from "../models/user.models.js";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
-import { ApiError } from "../utils/apiError";
+import { ApiError } from "../utils/apiError.js";
 
 
 const isLoggedIn = async function(req,res,next){
