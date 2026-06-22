@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required:[true,"User Name is required"],
         lowercase:true,
-        trim:true
+        trim:true,
+        unique:true
     },
     name:{
         type: String,
@@ -19,7 +20,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required:[true,"Email is required"],
         lowercase:true,
-        trim:true
+        trim:true,
+        unique:true
     },
     password:{
         type:String,
@@ -52,17 +54,16 @@ const UserSchema = new mongoose.Schema({
 },{timestamps:true})
 
 
-UserSchema.pre("save",async function(next){
-    if(!this.isModified("password")) return next();
+UserSchema.pre("save",async function(){
+    if(!this.isModified("password")) return;
     this.password = await bcrypt.hash(this.password,10);
-    return next();
 })
 
-UserSchema.methods.isPasswordCorrect(async function(password){
+UserSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password,this.password);
-})
+}
 
-UserSchema.methods.generateAccessToken(async function(){
+UserSchema.methods.generateAccessToken = async function(){
     return await jwt.sign({
         _id:this._id,
         userName:this.userName,
@@ -70,9 +71,9 @@ UserSchema.methods.generateAccessToken(async function(){
     },process.env.ACCESS_TOKEN_SECRET,{
         expiresIn:process.env.ACCESS_TOKEN_EXPIRY
     })
-})
+}
 
-UserSchema.methods.generateRefreshToken(async function(){
+UserSchema.methods.generateRefreshToken = async function(){
     const refreshToken = await jwt.sign({
         _id:this._id,
     },process.env.REFRESH_TOKEN_SECRET,{
@@ -80,6 +81,6 @@ UserSchema.methods.generateRefreshToken(async function(){
     })
     this.refreshToken = refreshToken;
     return refreshToken;
-})
+}
 
 export const User = mongoose.model("User",UserSchema);

@@ -13,7 +13,7 @@ const AddressSchema = new mongoose.Schema({
         type: String,
         required:[true,"State is required"],
     },
-    postalCode:{
+    pinCode:{
         type: Number,
         required:[true,"Postal Code is required"],
     },

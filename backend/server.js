@@ -10,8 +10,8 @@ configDotenv();
 
 connectDB()
 .then(()=>{
-    app.listen(process.env.PORT||5000,()=>{
-        console.log("Server started at port: ",process.env.PORT||5000)
+    app.listen(process.env.PORT_NO||5000,()=>{
+        console.log("Server started at port: ",process.env.PORT_NO||5000)
     })
 })
 .catch((error)=>{
