@@ -27,7 +27,7 @@ const deleteProduct = asyncHandler( async (req,res)=>{
         throw new ApiError(404,"Product not found!!");
     }
     const userId = req.user._id;
-    if(product.provider.toString() === userId){
+    if(product.provider.toString() === userId.toString()){
         await Product.findByIdAndDelete(productId);
     }
     else{
