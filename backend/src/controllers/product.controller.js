@@ -1,11 +1,40 @@
-import { Product } from "./product.models.js";
-import { ApiError } from "../utils/apiError.js";
+import { Product } from "../models/product.models.js";
+import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createProduct = asyncHandler(async (req,res)=>{
+    const {name,description,warranty,price} = req.body;
+    const providerId = req.user._id;
+    let productImage
+    try {
+        productImage = (await uploadOnCloudinary(req.file.path)).url;
+    } catch (error) {
+        throw new ApiError(409,error);
+    }
+    try {
+        const newProduct = await Product.create({name:name,description:description,image:productImage,provider:providerId,warranty:warranty,price:price})   
+    } catch (error) {
+        throw new ApiError(409,"Error on Product Creation!!");
+    }
+    return res.status(201).send("Product created Successfully!!")
+})
 
+const deleteProduct = asyncHandler( async (req,res)=>{
+    const {productId} = req.params;
+    const product = await Product.findById(productId);
+    if(!product){
+        throw new ApiError(404,"Product not found!!");
+    }
+    const userId = req.user._id;
+    if(product.provider.toString() === userId){
+        await Product.findByIdAndDelete(productId);
+    }
+    else{
+        throw new ApiError(409,"Forbidden!!");
+    }
+    return res.status(200).json({message:"Product have been deleted!!"});
 })
 
 
-export {createProduct};
+export {createProduct,deleteProduct};

@@ -4,12 +4,14 @@ setServers(["8.8.8.8", "1.1.1.1"]);
 import connectDB from "./src/db/index.js";
 
 import { configDotenv } from "dotenv";
-import {app} from "./src/app.js";
-
 configDotenv();
+
+import {app} from "./src/app.js";
+import { serviceCloudinary } from "./src/utils/cloudinary.js";
 
 connectDB()
 .then(()=>{
+    serviceCloudinary();
     app.listen(process.env.PORT_NO||5000,()=>{
         console.log("Server started at port: ",process.env.PORT_NO||5000)
     })

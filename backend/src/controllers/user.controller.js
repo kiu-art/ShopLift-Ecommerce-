@@ -27,6 +27,12 @@ const registerUser = asyncHandler(async (req,res)=>{
         console.log(error)
         throw new ApiError(409,"User cant be Created please try again later.",error)
     }
+    const refreshToken = await newUser.generateRefreshToken();
+    const accessToken = await newUser.generateAccessToken();
+    console.log(refreshToken,accessToken);
+    await res.cookie("accessToken",accessToken);
+    await res.cookie("refreshToken",refreshToken);
+    await newUser.save({validateBeforeSave:false})
     return res.status(201).send("User is Created");
 })
 
@@ -46,6 +52,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     console.log(refreshToken,accessToken);
     await res.cookie("accessToken",accessToken);
     await res.cookie("refreshToken",refreshToken);
+    await newUser.save({validateBeforeSave:false})
     return res.status(201).send("Logged in");
 })
 

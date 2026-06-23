@@ -5,28 +5,42 @@ import { ApiError } from "../utils/apiError.js";
 
 
 const isLoggedIn = async function(req,res,next){
-    const accessToken = req.cookies?.accessToken
+    let accessToken = req.cookies?.accessToken
+    let _id;
     if(accessToken){
-        const {_id} = await jwt.verify(accessToken , process.env.ACCESS_TOKEN_SECRET);
-        const user = await User.findById(_id);
-        if(!user){throw new ApiError(401,"Cannot be Authorized !!!")};
-        req.user = user;
-        next();
+        try {
+            _id = await jwt.verify(accessToken , process.env.ACCESS_TOKEN_SECRET)._id;
+            const user = await User.findById(_id);
+            if(!user){throw new ApiError(401,"Cannot be Authorized !!!")};
+            req.user = user;
+            next();
+        } catch (error) {
+            if(error.name==="TokenExpiredError"){
+                const refreshToken = req.cookies?.refreshToken;
+                if(refreshToken){
+                    try {
+                        _id = await jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET)._id;
+                        const user = await User.findById(_id);
+                        if(user.refreshToken !== refreshToken){throw new ApiError(401,"Cannot be Authorized !!!")};
+                        req.user = user;
+                        accessToken = await user.generateAccessToken();
+                        res.cookie("accessToken",accessToken);
+                        next();
+                    } catch (error) {
+                        throw new ApiError(401,"Cannot be Authorized !!!",error)
+                    }
+                }
+                else{
+                    throw new ApiError(401,"Cannot be Authorized !!!")
+                }
+            }
+            else{
+                throw new ApiError(401,"UnAuthorized!!");
+            }
+        }
     }
     else{
-        const refreshToken = req.cookies?.refreshToken;
-        if(refreshToken){
-            const {_id} = await jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET);
-            const user = await User.findById(_id);
-            if(user.refreshToken !== refreshToken){throw new ApiError(401,"Cannot be Authorized !!!")};
-            req.user = user;
-            accessToken = user.generateAccessToken();
-            res.cookie("accessToken",accessToken);
-            next();
-        }
-        else{
-            throw new ApiError(401,"Cannot be Authorized !!!")
-        }
+        throw new ApiError(401,"Please login!!!");
     }
 }
 

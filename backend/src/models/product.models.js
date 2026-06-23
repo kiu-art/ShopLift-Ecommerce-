@@ -24,7 +24,8 @@ const ProductSchema = new mongoose.Schema({
     },
     warranty:{
         type:String,
-        trim:true
+        trim:true,
+        required:true
     },
     price:{
         type:Number,
