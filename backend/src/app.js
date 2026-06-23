@@ -20,6 +20,6 @@ app.use("/api/v1/users",userRouter);
 
 app.use("/api/v1/cart",cartRouter);
 
-app.use("/api/v1/product",productRouter);
+app.use("/api/v1/admin/product",productRouter);
 
 export {app};
