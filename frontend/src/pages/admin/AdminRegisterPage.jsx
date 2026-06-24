@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { adminRegister } from '../utils/api';
+import { adminRegister } from '../../utils/api.js';
 import { Link } from 'react-router-dom';
 
 const AdminRegisterPage = () => {

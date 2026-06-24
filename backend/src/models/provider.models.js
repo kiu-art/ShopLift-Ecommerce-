@@ -47,6 +47,20 @@ const ProviderSchema = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:"Product"
         }
+    ],
+    orders:[
+        {
+            product:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"Product",
+                required:true,
+            },
+            status:{
+                type:String,
+                enum:["Not Shipped", "On Delivery", "Shipped"],
+                default:"Not Shipped"
+            }
+        }
     ]
 },{timestamps:true});
 

@@ -19,3 +19,8 @@ export const adminRegister = async (formData)=>{
     const response = await axiosInstance.post("/admin/register",formData);
     return response.data;
 }
+
+export const adminCreateProduct = async(productData)=>{
+    const response = await axiosInstance.post("/admin/product/create",productData,{headers:{"Content-Type":"multipart/form-data"}});
+    return response.data;
+}

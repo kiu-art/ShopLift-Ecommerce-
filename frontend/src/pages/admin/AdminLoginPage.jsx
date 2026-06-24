@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { adminLogin } from '../utils/api';
+import { adminLogin } from '../../utils/api';
 import { Link } from 'react-router-dom';
 
 const AdminLoginPage = () => {

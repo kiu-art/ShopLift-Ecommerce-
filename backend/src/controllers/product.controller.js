@@ -5,7 +5,10 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createProduct = asyncHandler(async (req,res)=>{
     const {name,description,warranty,price} = req.body;
-    const providerId = req.user._id;
+    console.log(req.body);
+    console.log(req.provider);
+    console.log(req.file)
+    const providerId = req.provider._id;
     let productImage
     try {
         productImage = (await uploadOnCloudinary(req.file.path)).url;
@@ -26,8 +29,8 @@ const deleteProduct = asyncHandler( async (req,res)=>{
     if(!product){
         throw new ApiError(404,"Product not found!!");
     }
-    const userId = req.user._id;
-    if(product.provider.toString() === userId.toString()){
+    const providerId = req.provider._id;
+    if(product.provider.toString() === providerId.toString()){
         await Product.findByIdAndDelete(productId);
     }
     else{
