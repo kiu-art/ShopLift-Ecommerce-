@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { createProduct, deleteProduct } from "../controllers/product.controller.js";
-import { isLoggedIn } from "../middlewares/auth.middleware.js";
+import { isAdminLoggedIn } from "../middlewares/authAdmin.middleware.js";
 import {upload} from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
-router.route("/create").post(isLoggedIn,upload.single("productImage"),createProduct);
-router.route("/delete/:productId").delete(isLoggedIn,deleteProduct);
+router.route("/create").post(isAdminLoggedIn,upload.single("productImage"),createProduct);
+router.route("/delete/:productId").delete(isAdminLoggedIn,deleteProduct);
 
 export default router;

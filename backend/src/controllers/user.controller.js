@@ -52,7 +52,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     console.log(refreshToken,accessToken);
     await res.cookie("accessToken",accessToken);
     await res.cookie("refreshToken",refreshToken);
-    await newUser.save({validateBeforeSave:false})
+    await user.save({validateBeforeSave:false})
     return res.status(201).send("Logged in");
 })
 
