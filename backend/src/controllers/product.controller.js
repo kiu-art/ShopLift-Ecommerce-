@@ -17,6 +17,8 @@ const createProduct = asyncHandler(async (req,res)=>{
     }
     try {
         const newProduct = await Product.create({name:name,description:description,image:productImage,provider:providerId,warranty:warranty,price:price})   
+        req.provider.products.push(newProduct._id);
+        await req.provider.save();
     } catch (error) {
         throw new ApiError(409,"Error on Product Creation!!");
     }

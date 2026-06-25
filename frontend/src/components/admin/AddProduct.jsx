@@ -1,50 +1,73 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { adminCreateProduct } from '../../utils/api'
 
-
 function AddProduct() {
+  const fileInputRef = useRef(null)
+
   const [productDetails, setProductDetails] = useState({
-    name:'',
-    description:'',
-    warranty:'',
-    price:'',
-    image:null
+    name: '',
+    description: '',
+    warranty: '',
+    price: '',
+    image: null
   })
-  const handleChange = (e)=>{
-    const{name,value,files} = e.target;
-    if(name==="image"){
-      setProductDetails((prev)=>{
-        return({
-          ...prev,
-          [name]:files[0]
-        }
-        )
-      })
-    }
-    else{
-      setProductDetails((prev)=>{
-        return({
-          ...prev,
-          [name]:value
-        }
-        )
-      })
+
+  const [loading, setLoading] = useState(false)
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target
+
+    if (name === "image") {
+      setProductDetails((prev) => ({
+        ...prev,
+        image: files[0]
+      }))
+    } else {
+      setProductDetails((prev) => ({
+        ...prev,
+        [name]: value
+      }))
     }
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const formData = new FormData();
+    setLoading(true);
 
-    formData.append("name", productDetails.name);
-    formData.append("description", productDetails.description);
-    formData.append("warranty", productDetails.warranty);
-    formData.append("price", productDetails.price);
-    formData.append("productImage", productDetails.image);
+    try {
+      const formData = new FormData()
 
-    await adminCreateProduct(formData);
-  };
+      formData.append("name", productDetails.name)
+      formData.append("description", productDetails.description)
+      formData.append("warranty", productDetails.warranty)
+      formData.append("price", productDetails.price)
+      formData.append("productImage", productDetails.image)
+
+      const response = await adminCreateProduct(formData)
+
+      setProductDetails({
+        name: '',
+        description: '',
+        warranty: '',
+        price: '',
+        image: null
+      })
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
+
+      alert("Product Added Successfully")
+      console.log(response)
+
+    } catch (error) {
+      console.error(error)
+      alert("Failed To Add Product")
+    }
+    setLoading(false);
+  }
+
   return (
     <div className="bg-zinc-950 text-white min-h-full p-8">
 
@@ -52,7 +75,10 @@ function AddProduct() {
         Add Product
       </h1>
 
-      <form onSubmit={handleSubmit} className="bg-zinc-900 p-6 rounded-xl w-[600px] " >
+      <form
+        onSubmit={handleSubmit}
+        className="bg-zinc-900 p-6 rounded-xl w-[600px]"
+      >
 
         <div className="mb-5">
           <label className="block mb-2 text-zinc-300">
@@ -62,18 +88,19 @@ function AddProduct() {
           <input
             type="text"
             name="name"
-            placeholder="Enter Product Name"
+            value={productDetails.name}
             onChange={handleChange}
+            placeholder="Enter Product Name"
             className="
-            w-full
-            bg-zinc-800
+              w-full
+              bg-zinc-800
               border border-zinc-700
               rounded-lg
               p-3
               outline-none
               focus:border-indigo-500
-              "
-              />
+            "
+          />
         </div>
 
         <div className="mb-5">
@@ -82,11 +109,12 @@ function AddProduct() {
           </label>
 
           <textarea
-              name="description"
-              onChange={handleChange}
-              rows="4"
-              placeholder="Enter Product Description"
-              className="
+            name="description"
+            value={productDetails.description}
+            onChange={handleChange}
+            rows="4"
+            placeholder="Enter Product Description"
+            className="
               w-full
               bg-zinc-800
               border border-zinc-700
@@ -94,8 +122,8 @@ function AddProduct() {
               p-3
               outline-none
               focus:border-indigo-500
-              "
-              />
+            "
+          />
         </div>
 
         <div className="mb-5">
@@ -105,8 +133,9 @@ function AddProduct() {
 
           <input
             type="text"
-            onChange={handleChange}
             name="warranty"
+            value={productDetails.warranty}
+            onChange={handleChange}
             placeholder="Example: 2 Years"
             className="
               w-full
@@ -116,8 +145,8 @@ function AddProduct() {
               p-3
               outline-none
               focus:border-indigo-500
-              "
-              />
+            "
+          />
         </div>
 
         <div className="mb-5">
@@ -127,8 +156,9 @@ function AddProduct() {
 
           <input
             type="number"
-            onChange={handleChange}
             name="price"
+            value={productDetails.price}
+            onChange={handleChange}
             placeholder="Enter Price"
             className="
               w-full
@@ -138,8 +168,8 @@ function AddProduct() {
               p-3
               outline-none
               focus:border-indigo-500
-              "
-              />
+            "
+          />
         </div>
 
         <div className="mb-6">
@@ -148,6 +178,7 @@ function AddProduct() {
           </label>
 
           <input
+            ref={fileInputRef}
             type="file"
             name="image"
             accept="image/*"
@@ -181,7 +212,7 @@ function AddProduct() {
             transition-colors
           "
         >
-          Add Product
+          {loading?("loading..."):("Add Product")}
         </button>
 
       </form>

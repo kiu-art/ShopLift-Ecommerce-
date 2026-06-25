@@ -1,6 +1,9 @@
-import React from 'react'
+function Profile({ profileData }) {
 
-function Profile() {
+  if(!profileData){
+    return <div className="text-white">Loading...</div>
+  }
+
   return (
     <div className="bg-zinc-950 text-white min-h-full p-8">
 
@@ -12,36 +15,30 @@ function Profile() {
 
         <div className="mb-4">
           <p className="text-zinc-400">Username</p>
-          <h2 className="text-xl">Ujwal</h2>
+          <h2 className="text-xl">{profileData.name}</h2>
         </div>
 
         <div className="mb-4">
           <p className="text-zinc-400">Email</p>
-          <h2 className="text-xl">ujwal@gmail.com</h2>
+          <h2 className="text-xl">{profileData.email}</h2>
         </div>
 
         <div className="mb-4">
           <p className="text-zinc-400">Phone Number</p>
-          <h2 className="text-xl">9876543210</h2>
+          <h2 className="text-xl">{profileData.phoneNo}</h2>
         </div>
 
         <div className="mb-4">
           <p className="text-zinc-400">Date of Birth</p>
-          <h2 className="text-xl">01/01/2000</h2>
+          <h2 className="text-xl">
+            {new Date(profileData.dateOfBirth).toLocaleDateString()}
+          </h2>
         </div>
 
-        <button
-          className="
-            mt-4
-            bg-indigo-600
-            hover:bg-indigo-500
-            px-5 py-2
-            rounded-lg
-            transition-colors
-          "
-        >
-          Edit Profile
-        </button>
+        <div className="mb-4">
+          <p className="text-zinc-400">GST No.</p>
+          <h2 className="text-xl">{profileData.gstNo}</h2>
+        </div>
 
       </div>
 

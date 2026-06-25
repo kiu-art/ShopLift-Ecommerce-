@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminSideBar from '../../components/admin/AdminSideBar'
 import DashBoard from '../../components/admin/DashBoard'
@@ -6,9 +6,39 @@ import Profile from '../../components/admin/Profile'
 import Orders from '../../components/admin/Orders'
 import AddProduct from '../../components/admin/AddProduct'
 import Products from '../../components/admin/Products'
+import { adminCreateProduct, adminProducts, adminProfile } from '../../utils/api'
 
 function AdminPanel() {
   const [activePage, setActivePage] = useState("DashBoard")
+  const [dataProfile, setDataProfile] = useState(null)
+  const [dataProducts, setDataProducts] = useState(null)
+  const [addProducts, setAddProduct] = useState(null)
+  
+  useEffect(() => {
+    const loadPageData = async () => {
+      console.log("Active Page:", activePage)
+      
+      if (activePage === "Profile") {
+        try {
+          const profileData = await adminProfile()
+          setDataProfile(profileData)
+        } catch (error) {
+          console.error("Failed to load profile:", error)
+        }
+      }
+      if (activePage === "Products") {
+        try {
+          const productData = await adminProducts()
+          console.log(productData);
+          setDataProducts(productData)
+        } catch (error) {
+          console.error("Failed to load profile:", error)
+        }
+      }
+    }
+    loadPageData()
+  }, [activePage])
+  
   return (
     <div>
         <AdminNavBar/>
@@ -17,11 +47,13 @@ function AdminPanel() {
             <AdminSideBar  setActivePage={setActivePage}/>
           </div>
           <div className='w-full flex justify-center items-center bg-zinc-950 min-h-[calc(100vh)] pt-18'>
-            {activePage==="DashBoard" && <DashBoard/>}
-            {activePage==="Profile" && <Profile/>}
-            {activePage==="Products" && <Products/>}
+            <div>
+            {activePage==="DashBoard" && <DashBoard />}
+            {activePage==="Profile" && <Profile profileData={dataProfile}/>}
+            {activePage==="Products" && <Products productData={dataProducts}/>}
             {activePage==="Orders" && <Orders/>}
-            {activePage==="Add Product" && <AddProduct/>}
+            {activePage==="Add Product" && <AddProduct response={addProducts}/>}
+            </div>
           </div>
         </div>
     </div>

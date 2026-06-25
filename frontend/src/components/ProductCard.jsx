@@ -5,6 +5,7 @@ function ProductCard({
   name,
   description,
   price,
+  _id,
   showDelete = false,
   onDelete = () => {},
   onClick = () => {}

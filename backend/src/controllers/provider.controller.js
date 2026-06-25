@@ -52,4 +52,25 @@ const loginProvider = asyncHandler(async(req,res)=>{
 })
 
 
-export {registerProvider,loginProvider};
+const logoutProvider = asyncHandler(async(req,res)=>{
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    console.log("logged out")
+    return res.status(200).send("Logged out");
+})
+
+const getProviderProfile = asyncHandler(async(req,res)=>{
+    const providerData = (await Provider.findById(req.provider._id).select("name email dateOfBirth phoneNo gstNo"));
+    if(!providerData) throw new ApiError(404,"Provider not found");
+    console.log("data sent",providerData)
+    return res.status(200).json(providerData);
+})
+
+const getProviderProducts = asyncHandler(async (req,res)=>{
+    const providerProducts = (await Provider.findById(req.provider._id).populate("products").select("products")).products;
+    console.log("Product data sent",providerProducts);
+    return res.status(200).json(providerProducts);
+})
+
+
+export {registerProvider,loginProvider,logoutProvider,getProviderProfile,getProviderProducts};

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 
 function AdminSideBar({setActivePage}) {
-  let pages=["DashBoard","Profile","Orders","Add Product"];
+  let pages=["DashBoard","Profile","Products","Orders","Add Product"];
 
   return (
     <div className='flex flex-col justify-evenly bg-black w-fit h-[calc(100vh_-_4.5rem)]'>
