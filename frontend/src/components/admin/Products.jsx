@@ -1,13 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProductCard from '../ProductCard';
-import { adminDeleteProduct } from '../../utils/api'
+import { useState } from 'react';
+import { adminProducts } from '../../utils/api';
 
+function Products() {
 
-function Products({productData}) {
-
+  const [productData, setProductData] = useState(null)
+  useEffect(()=>{
+    const loadProducts = async()=>{
+      try {
+        const data = await adminProducts()
+        console.log(data);
+        setProductData(data)
+        } catch (error) {
+        console.error("Failed to load profile:", error)
+      }
+    }
+    loadProducts();
+  },[])
   
-
-  if(!productData){
+  if(productData==null){
     return (
       <h1 className='text-white'>loading ...</h1>
     ) 
@@ -22,7 +34,7 @@ function Products({productData}) {
       <div className='flex flex-wrap pl-40'>
           {productData.map((product)=>{
             return(
-              <ProductCard key={product._id} image={product.image} name={product.name} description={product.description} price={product.price} showDelete={true} _id={product._id} onDelete={()=>{adminDeleteProduct(product._id)}} />
+              <ProductCard key={product._id} image={product.image} name={product.name} description={product.description} price={product.price} showDelete={true} _id={product._id} />
             )
           })}
       </div>

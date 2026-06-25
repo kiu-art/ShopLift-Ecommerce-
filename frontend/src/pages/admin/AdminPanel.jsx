@@ -11,7 +11,6 @@ import { adminCreateProduct, adminProducts, adminProfile } from '../../utils/api
 function AdminPanel() {
   const [activePage, setActivePage] = useState("DashBoard")
   const [dataProfile, setDataProfile] = useState(null)
-  const [dataProducts, setDataProducts] = useState(null)
   const [addProducts, setAddProduct] = useState(null)
   
   useEffect(() => {
@@ -22,15 +21,6 @@ function AdminPanel() {
         try {
           const profileData = await adminProfile()
           setDataProfile(profileData)
-        } catch (error) {
-          console.error("Failed to load profile:", error)
-        }
-      }
-      if (activePage === "Products") {
-        try {
-          const productData = await adminProducts()
-          console.log(productData);
-          setDataProducts(productData)
         } catch (error) {
           console.error("Failed to load profile:", error)
         }
@@ -50,7 +40,7 @@ function AdminPanel() {
             <div>
             {activePage==="DashBoard" && <DashBoard />}
             {activePage==="Profile" && <Profile profileData={dataProfile}/>}
-            {activePage==="Products" && <Products productData={dataProducts}/>}
+            {activePage==="Products" && <Products/>}
             {activePage==="Orders" && <Orders/>}
             {activePage==="Add Product" && <AddProduct response={addProducts}/>}
             </div>
