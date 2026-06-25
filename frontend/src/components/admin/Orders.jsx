@@ -1,38 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { adminOrders } from '../../utils/api'
 
 function Orders() {
 
   const [status, setStatus] = useState("Not Shipped")
+  const [orders, setOrders] = useState(null)
 
-  const orders = [
-    {
-      _id: "1",
-      productName: "Gaming Laptop",
-      image: "https://via.placeholder.com/300",
-      customer: "Ujwal",
-      quantity: 2,
-      price: 75000,
-      status: "Not Shipped"
-    },
-    {
-      _id: "2",
-      productName: "iPhone",
-      image: "https://via.placeholder.com/300",
-      customer: "Rahul",
-      quantity: 1,
-      price: 80000,
-      status: "On Delivery"
-    },
-    {
-      _id: "3",
-      productName: "Monitor",
-      image: "https://via.placeholder.com/300",
-      customer: "Aman",
-      quantity: 1,
-      price: 15000,
-      status: "Shipped"
+  useEffect(() => {
+
+    const loadOrders = async () => {
+      try {
+        const data = await adminOrders()
+        console.log(data);
+        setOrders(data.orders)
+      } catch (error) {
+        console.error(error)
+      }
     }
-  ]
+
+    loadOrders()
+
+  }, [])
+
+  if (orders === null) {
+    return (
+      <h1 className='text-white text-2xl'>
+        Loading Orders...
+      </h1>
+    )
+  }
+  if (orders.length === 0) {
+    return (
+      <h1 className='text-white text-2xl'>
+        You have No Orders
+      </h1>
+    )
+  }
 
   const filteredOrders = orders.filter(
     (order) => order.status === status
@@ -45,7 +48,6 @@ function Orders() {
         Orders
       </h1>
 
-      {/* Status Tabs */}
       <div className="flex gap-4 mb-8">
 
         <button
@@ -86,20 +88,24 @@ function Orders() {
 
       </div>
 
-      {/* Orders */}
+      {filteredOrders.length === 0 && (
+        <h2 className="text-zinc-400 text-xl">
+          No Orders Found
+        </h2>
+      )}
 
       <div className="flex flex-wrap gap-6">
 
-        {filteredOrders.map((order) => (
+        {filteredOrders.map((order, index) => (
 
           <div
-            key={order._id}
-            className="bg-zinc-900 rounded-xl p-4 w-[320px]"
+            key={index}
+            className="bg-zinc-900 rounded-xl p-4 w-[340px]"
           >
 
             <img
-              src={order.image}
-              alt={order.productName}
+              src={order.product.image}
+              alt={order.product.name}
               className="
                 w-full
                 h-48
@@ -110,28 +116,43 @@ function Orders() {
             />
 
             <h2 className="text-xl font-semibold mb-2">
-              {order.productName}
+              {order.product.name}
             </h2>
 
             <p className="text-zinc-400">
-              Customer: {order.customer}
+              Customer: {order.customer.name}
             </p>
 
             <p className="text-zinc-400">
-              Quantity: {order.quantity}
+              Price: ₹{order.product.price}
             </p>
 
-            <p className="text-zinc-400 mb-2">
-              Price: ₹{order.price}
-            </p>
+            <div className="mt-3">
 
-            <div className="
-              inline-block
-              px-3 py-1
-              rounded-full
-              bg-indigo-600
-              text-sm
-            ">
+              <p className="text-zinc-300 font-medium mb-1">
+                Address
+              </p>
+
+              <div className="text-zinc-400 text-sm">
+                <p>{order.customer.address.street}</p>
+                <p>{order.customer.address.city}</p>
+                <p>{order.customer.address.state}</p>
+                <p>{order.customer.address.pinCode}</p>
+              </div>
+
+            </div>
+
+            <div
+              className="
+                inline-block
+                mt-4
+                px-3
+                py-1
+                rounded-full
+                bg-indigo-600
+                text-sm
+              "
+            >
               {order.status}
             </div>
 

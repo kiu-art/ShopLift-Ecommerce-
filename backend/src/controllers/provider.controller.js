@@ -72,5 +72,24 @@ const getProviderProducts = asyncHandler(async (req,res)=>{
     return res.status(200).json(providerProducts);
 })
 
+const getOrders = asyncHandler(async (req,res)=>{
+    await req.provider.populate([
+        {
+            path:"orders.product",
+            select:"name image price"
+        },
+        {
+            path:"orders.customer",
+            select:"name address",
+            populate:{
+                path:"address"
+            }
+        }
+    ]);
 
-export {registerProvider,loginProvider,logoutProvider,getProviderProfile,getProviderProducts};
+    return res.status(200).json({
+        orders: req.provider.orders
+    });
+});
+
+export {registerProvider,loginProvider,logoutProvider,getProviderProfile,getProviderProducts,getOrders};

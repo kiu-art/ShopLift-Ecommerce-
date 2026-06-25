@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProviderProducts, getProviderProfile, loginProvider, logoutProvider, registerProvider } from "../controllers/provider.controller.js";
+import { getOrders, getProviderProducts, getProviderProfile, loginProvider, logoutProvider, registerProvider } from "../controllers/provider.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { isAdminLoggedIn } from "../middlewares/authAdmin.middleware.js";
 
@@ -15,5 +15,7 @@ router.route("/logout").get(logoutProvider);
 router.route("/profile").get(isAdminLoggedIn,getProviderProfile);
 
 router.route("/products").get(isAdminLoggedIn,getProviderProducts);
+
+router.route("/orders").get(isAdminLoggedIn,getOrders)
 
 export default router;

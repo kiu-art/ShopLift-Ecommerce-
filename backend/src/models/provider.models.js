@@ -59,6 +59,11 @@ const ProviderSchema = new mongoose.Schema({
                 type:String,
                 enum:["Not Shipped", "On Delivery", "Shipped"],
                 default:"Not Shipped"
+            },
+            customer:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"User",
+                required:true
             }
         }
     ]
