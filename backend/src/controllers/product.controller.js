@@ -34,6 +34,8 @@ const deleteProduct = asyncHandler( async (req,res)=>{
     const providerId = req.provider._id;
     if(product.provider.toString() === providerId.toString()){
         await Product.findByIdAndDelete(productId);
+        await req.provider.products.pull(productId);
+        await req.provider.save();
     }
     else{
         throw new ApiError(409,"Forbidden!!");

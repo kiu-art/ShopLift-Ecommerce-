@@ -141,6 +141,9 @@ function Orders() {
               </div>
 
             </div>
+            <button className='text-white bg-indigo-700 p-2 m-3'>
+              Update
+            </button>
 
             <div
               className="
