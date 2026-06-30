@@ -44,4 +44,18 @@ const deleteProduct = asyncHandler( async (req,res)=>{
 })
 
 
-export {createProduct,deleteProduct};
+const searchProduct = asyncHandler(async (req,res)=>{
+    const searchProduct = req.params;
+    try {
+        const products = await Product.find({
+            name:{$regex:`${searchProduct}$` , $options:"i"}
+        });
+        console.log(products);
+        res.send(200).json(products);
+    } catch (error) {
+        ApiError(403,"Error in Product Search.",error);
+        res.send(403);
+    }
+})
+
+export {createProduct,deleteProduct,searchProduct};

@@ -6,6 +6,7 @@ import AdminRegisterPage from './pages/admin/AdminRegisterPage'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
 import HomePage from './pages/HomePage'
 import AdminPanel from './pages/Admin/AdminPanel'
+import SearchPage from './pages/SearchPage'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path='/admin/login' element={<AdminLoginPage/>}/>
           <Route path='/home' element={<HomePage/>}></Route>
           <Route path='/admin/panel' element={<AdminPanel/>}></Route>
+          <Route path='/user/search' element={<SearchPage/>}></Route>
       </Routes>
     </BrowserRouter>
   )

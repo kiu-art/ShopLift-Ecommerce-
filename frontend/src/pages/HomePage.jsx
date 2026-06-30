@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from "react-router-dom";
 
 const HomePage = () => {
   // Reusable hover class for glassy nav links
@@ -29,10 +30,9 @@ const HomePage = () => {
 
             {/* Center Navigation Links (Hidden on mobile for clarity) */}
             <div className="hidden md:flex space-x-2">
-              <a href="#" className={navLinkClass}>Products</a>
-              <a href="#" className={navLinkClass}>Admin</a>
-              <a href="#" className={navLinkClass}>User Login</a>
-              <a href="#" className={navLinkClass}>Login</a>
+              <NavLink to={"/products"} className={navLinkClass}>Products</NavLink>
+              <NavLink to={"/admin/login"} className={navLinkClass}>Admin</NavLink>
+              <NavLink to={"/login"} className={navLinkClass}>User Login</NavLink>
             </div>
 
             {/* Right Action Icons (Profile & Cart) */}

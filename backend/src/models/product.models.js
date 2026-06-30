@@ -43,7 +43,11 @@ const ProductSchema = new mongoose.Schema({
             ref:"Review"
         }
     ],
-
+    category:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        enum:["Electronics","Accessories","Bags","Home","Other","Clothes"]
+    }
 },{timestamps:true})
 
 export const Product = mongoose.model("Product",ProductSchema);
