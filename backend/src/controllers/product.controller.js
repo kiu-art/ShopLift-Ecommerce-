@@ -1,4 +1,5 @@
 import { Product } from "../models/product.models.js";
+import { Review } from "../models/review.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
@@ -61,4 +62,36 @@ const searchProduct = asyncHandler(async (req,res)=>{
     }
 })
 
-export {createProduct,deleteProduct,searchProduct};
+const getProduct = asyncHandler(async (req,res)=>{
+    const {productId} = req.params;
+    try {
+        console.log(productId)
+        const data = await Product.findById(productId).populate("provider","name").populate("review");
+        console.log(data);
+        return res.status(201).json(data);
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(408,"Cant get Product data",error);
+    }
+    return res.status(408);
+})
+
+const createReview = asyncHandler(async(req,res)=>{
+    const {reviewerName,reviewComment,reviewRating,_id} = req.body;
+    console.log(req.body);
+    try {
+        const review = await Review.create({name:reviewerName,comment:reviewComment,rating:reviewRating});
+        await Product.findByIdAndUpdate(_id,{
+            $push:{
+                review:review._id
+            }
+        });
+        res.status(201).json(review);
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(306,"Review upload Failed",error);
+    }
+    return res.status(306);
+})
+
+export {createProduct,deleteProduct,searchProduct,getProduct,createReview};

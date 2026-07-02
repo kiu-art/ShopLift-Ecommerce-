@@ -53,3 +53,13 @@ export const userSearch = async (searchProduct)=>{
     const response = await axiosInstance.get(`/users/search/${searchProduct}`)
     return response.data;
 }
+
+export const getProduct = async (productId)=>{
+    const response = await axiosInstance.get(`/users/product/${productId}`)
+    return response.data;
+}
+
+export const createReview = async (reviewData)=>{
+    const response = await axiosInstance.post('/users/create/review',reviewData);
+    return response.data;
+}

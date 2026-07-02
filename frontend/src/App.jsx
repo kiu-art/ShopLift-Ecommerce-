@@ -7,6 +7,7 @@ import AdminLoginPage from './pages/admin/AdminLoginPage'
 import HomePage from './pages/HomePage'
 import AdminPanel from './pages/Admin/AdminPanel'
 import SearchPage from './pages/SearchPage'
+import ProductViewPage from './pages/ProductViewPage'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path='/home' element={<HomePage/>}></Route>
           <Route path='/admin/panel' element={<AdminPanel/>}></Route>
           <Route path='/user/search' element={<SearchPage/>}></Route>
+          <Route path='/user/product/:productId' element={<ProductViewPage/>}></Route>
       </Routes>
     </BrowserRouter>
   )
