@@ -45,7 +45,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     }
     const user = await User.findOne({email});
     if(!user.isPasswordCorrect(password)){
-        ApiError(402,"Wrong details!!");
+        ApiError(401,"Wrong details!!");
     }
     const refreshToken = await user.generateRefreshToken();
     const accessToken = await user.generateAccessToken();

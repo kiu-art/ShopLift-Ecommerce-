@@ -9,7 +9,8 @@ function AddProduct() {
     description: '',
     warranty: '',
     price: '',
-    image: null
+    image: null,
+    category:""
   })
 
   const [loading, setLoading] = useState(false)
@@ -43,6 +44,7 @@ function AddProduct() {
       formData.append("warranty", productDetails.warranty)
       formData.append("price", productDetails.price)
       formData.append("productImage", productDetails.image)
+      formData.append("category", productDetails.category)
 
       const response = await adminCreateProduct(formData)
 
@@ -51,7 +53,8 @@ function AddProduct() {
         description: '',
         warranty: '',
         price: '',
-        image: null
+        image: null,
+        category:""
       })
 
       if (fileInputRef.current) {
@@ -183,6 +186,34 @@ function AddProduct() {
             name="image"
             accept="image/*"
             onChange={handleChange}
+            className="
+              w-full
+              bg-zinc-800
+              border border-zinc-700
+              rounded-lg
+              p-3
+              file:bg-indigo-600
+              file:border-none
+              file:text-white
+              file:px-4
+              file:py-2
+              file:rounded-lg
+              file:mr-4
+            "
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-zinc-300">
+            Product Category
+          </label>
+
+          <input
+            ref={fileInputRef}
+            type="text"
+            name="category"
+            placeholder='Enter Category'
+            onChange={handleChange}
+            value={productDetails.category}
             className="
               w-full
               bg-zinc-800

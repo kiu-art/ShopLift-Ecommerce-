@@ -48,3 +48,8 @@ export const adminOrders = async ()=>{
     const response = await axiosInstance.get('/admin/orders');
     return response.data;
 }
+
+export const userSearch = async (searchProduct)=>{
+    const response = await axiosInstance.get(`/users/search/${searchProduct}`)
+    return response.data;
+}

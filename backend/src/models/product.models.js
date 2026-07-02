@@ -44,7 +44,7 @@ const ProductSchema = new mongoose.Schema({
         }
     ],
     category:{
-        type:mongoose.Schema.Types.ObjectId,
+        type:String,
         required:true,
         enum:["Electronics","Accessories","Bags","Home","Other","Clothes"]
     }

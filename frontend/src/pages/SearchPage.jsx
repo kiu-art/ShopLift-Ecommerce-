@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import { userSearch } from '../utils/api';
+import { useEffect } from 'react';
 
 const SearchPage = () => {
   // Sample Data matching the "Premium Quality" theme
-  const initialProducts = [
-    { id: 1, name: "Chronograph Minimalist Watch", category: "Accessories", price: 249, rating: 4.8, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60" },
-    { id: 2, name: "Studio ANC Headphones", category: "Electronics", price: 399, rating: 4.9, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60" },
-    { id: 3, name: "Premium Leather Backpack", category: "Bags", price: 180, rating: 4.7, img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&auto=format&fit=crop&q=60" },
-    { id: 4, name: "Sleek Aluminum Desk Lamp", category: "Home", price: 85, rating: 4.5, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&auto=format&fit=crop&q=60" },
-    { id: 5, name: "Matte Black Water Flask", category: "Accessories", price: 45, rating: 4.6, img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=60" },
-    { id: 6, name: "Ergonomic Wireless Mouse", category: "Electronics", price: 120, rating: 4.8, img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60" },
-  ];
-
+  const [initialProducts, setInitialProducts] = useState([])
+  
   // States for search and filtering
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("featured");
-
+  
   const categories = ["All", "Electronics", "Accessories", "Bags", "Home"];
-
+  
+  useEffect(() => {
+    const fetchProduct = async ()=>{
+      let productsData = await userSearch(searchQuery);
+      console.log(productsData);
+      setInitialProducts(productsData);
+    }
+    fetchProduct();
+  }, [searchQuery])
   // Filter & Sort Logic
   const filteredProducts = initialProducts
     .filter(product => {
@@ -155,13 +158,13 @@ const SearchPage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <div 
-                    key={product.id} 
+                    key={product._id} 
                     className="group relative backdrop-blur-xl bg-white/[0.02] border border-white/[0.05] rounded-3xl overflow-hidden hover:bg-white/[0.04] transition-all duration-500 flex flex-col justify-between"
                   >
                     {/* Visual Media Container */}
                     <div className="aspect-square w-full bg-neutral-900 overflow-hidden relative">
                       <img 
-                        src={product.img} 
+                        src={product.image} 
                         alt={product.name}
                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
                       />
