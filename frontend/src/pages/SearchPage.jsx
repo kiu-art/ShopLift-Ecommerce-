@@ -15,6 +15,10 @@ const SearchPage = () => {
   const categories = ["All", "Electronics", "Accessories", "Bags", "Home"];
   
   useEffect(() => {
+    if(searchQuery.trim() === ""){
+      setInitialProducts([]);
+      return
+    }
     const fetchProduct = async ()=>{
       let productsData = await userSearch(searchQuery);
       console.log(productsData);
